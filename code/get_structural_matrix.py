@@ -9,14 +9,16 @@ import numpy as np
 def create_structural_matrix_df(path, pass_end, measure):
     paths_p_tracts = glob.glob(f'{path}/*_{measure}_{pass_end}.mat')
     # initiate atlas and labels
-    label_text = urllib.request.urlopen("https://raw.githubusercontent.com/asafmm/inconsistency_functional_connectivity/main/Schaefer2018_100Parcels_7Networks_order_info.txt").read()
-    # convert from 'binary' to normal string
-    label_text = label_text.decode('ascii')
+    # initiate atlas and labels
+    with open("../data/Schaefer2018_100Parcels_7Networks_order_info.txt", 'r') as f:
+        parcels_text = f.read()
     # select only even rows, which contain the labels 
-    lines = label_text.split('\n')[:-1]
+    lines = parcels_text.split('\n')[:-1]
     lines = lines[::2]
     # remove prefix from label: "7Networks_"
-    roi_labels = [roi[10:] for roi in lines]
+    roi_labels = [parcel[10:] for parcel in lines]
+    # remove prefix from label: "7Networks_"
+    # roi_labels = [roi[10:] for roi in lines]
     
     pattern = re.compile('.*(\d\d\d)_ep2d*') # pattern to find subject id
     df_rows = []
