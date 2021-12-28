@@ -1,6 +1,6 @@
 import scipy.io
 import matplotlib.pyplot as plt
-import urllib
+# import urllib
 import glob
 import re
 import pandas as pd
@@ -8,8 +8,6 @@ import numpy as np
 
 def create_structural_matrix_df(path, pass_end, measure):
     paths_p_tracts = glob.glob(f'{path}/*_{measure}_{pass_end}.mat')
-    # initiate atlas and labels
-    # initiate atlas and labels
     with open("../data/Schaefer2018_100Parcels_7Networks_order_info.txt", 'r') as f:
         parcels_text = f.read()
     # select only even rows, which contain the labels 
@@ -17,8 +15,6 @@ def create_structural_matrix_df(path, pass_end, measure):
     lines = lines[::2]
     # remove prefix from label: "7Networks_"
     roi_labels = [parcel[10:] for parcel in lines]
-    # remove prefix from label: "7Networks_"
-    # roi_labels = [roi[10:] for roi in lines]
     
     pattern = re.compile('.*(\d\d\d)_ep2d*') # pattern to find subject id
     df_rows = []
