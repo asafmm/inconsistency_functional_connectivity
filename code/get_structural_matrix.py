@@ -6,8 +6,8 @@ import re
 import pandas as pd
 import numpy as np
 
-def create_structural_matrix_df(path, pass_end, measure):
-    paths_p_tracts = glob.glob(f'{path}/*_{measure}_{pass_end}.mat')
+def get_cm_df(path, pass_end, measure):
+    paths = glob.glob(f'{path}/{pass_end}/*_{measure}_{pass_end}.mat')
     with open("../data/Schaefer2018_100Parcels_7Networks_order_info.txt", 'r') as f:
         parcels_text = f.read()
     # select only even rows, which contain the labels 
@@ -18,7 +18,7 @@ def create_structural_matrix_df(path, pass_end, measure):
     
     pattern = re.compile('.*(\d\d\d)_ep2d*') # pattern to find subject id
     df_rows = []
-    for path in paths_p_tracts:
+    for path in paths:
         cm = scipy.io.loadmat(path)['CM']
         tril_ind = np.tril_indices(cm.shape[0])
         cm_tril = cm[tril_ind]
@@ -34,3 +34,13 @@ def create_structural_matrix_df(path, pass_end, measure):
     sc_df = sc_df.iloc[sc_df.Subject.argsort(),:].reset_index(drop=True)
     sc_df = sc_df.set_index(sc_df['Subject'].astype(int))
     return sc_df
+
+def get_avg_cm(path, pass_end, measure):
+    paths = glob.glob(f'{path}/{pass_end}/*_{measure}_{pass_end}.mat')
+    avg_cm = np.nanmean([scipy.io.loadmat(path)['CM'] for path in paths], axis=0)
+    return avg_cm
+
+def get_subject_full_cm(path, pass_end, measure, subject):
+    subject_file = glob.glob(f'{path}/{pass_end}/{subject}*_{measure}_{pass_end}.mat')[0]
+    cm = scipy.io.loadmat(subject_file)['CM']
+    return cm
