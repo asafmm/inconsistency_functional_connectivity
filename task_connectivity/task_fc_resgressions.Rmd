@@ -1,0 +1,8 @@
+```{r}
+install.packages('glmnet')
+install.packages('ggplot2')
+library(glmnet)
+library(lm)
+```
+
+
