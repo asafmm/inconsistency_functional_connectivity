@@ -32,7 +32,8 @@ def get_cm_df(path, pass_end, measure):
     df_columns = np.insert(label_mat, obj=0, values='Subject')
     sc_df = pd.DataFrame(df_rows, columns=df_columns)
     sc_df = sc_df.iloc[sc_df.Subject.argsort(),:].reset_index(drop=True)
-    sc_df = sc_df.set_index(sc_df['Subject'].astype(int))
+    sc_df.Subject = sc_df.Subject.astype(int)
+    sc_df = sc_df.set_index('Subject')
     return sc_df
 
 def get_avg_cm(path, pass_end, measure):
